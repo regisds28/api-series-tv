@@ -25,6 +25,7 @@ public class Series implements Serializable {
 	private String sinopse;	
 	private String pais;
 	private String canal;
+	private String linkTrailer;
 	
 	@OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
 	private List<Elenco> elenco = new ArrayList<Elenco>();
@@ -85,6 +86,14 @@ public class Series implements Serializable {
 	}
 	public void setCanal(String canal) {
 		this.canal = canal;
+	}
+	
+	public String getLinkTrailer() {
+		return linkTrailer;
+	}
+	
+	public void setLinkTrailer(String linkTrailer) {
+		this.linkTrailer = linkTrailer;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
