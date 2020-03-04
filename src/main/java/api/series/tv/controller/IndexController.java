@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.series.tv.model.Elenco;
 import api.series.tv.model.Series;
 import api.series.tv.repository.SerieRepository;
 
@@ -19,8 +18,6 @@ public class IndexController {
 	
 	@Autowired
 	private SerieRepository serieRepository;
-	
-	private Elenco elenco;
 	
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<List<Series>> init(){
