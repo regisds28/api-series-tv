@@ -5,32 +5,42 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Table(name = "Temporada")
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Temporada {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private int numeroTemporada;
-	
-	@OneToMany(mappedBy = "temporada", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<Episodios> episodios = new ArrayList<Episodios>();;
-	
-	@JsonIgnore
-	@ForeignKey(name = "serie_id")
-	@ManyToOne
-	private Series serie;
+
+	@OneToMany(mappedBy = "temporada", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Episodio> episodio = new ArrayList<Episodio>();
+
+	@JoinColumn(name = "serie_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Serie serie;
 
 	public Long getId() {
 		return id;
@@ -48,47 +58,21 @@ public class Temporada {
 		this.numeroTemporada = numeroTemporada;
 	}
 
-	public List<Episodios> getEpisodios() {
-		return episodios;
+	public List<Episodio> getEpisodios() {
+		return episodio;
 	}
 
-	public void setEpisodios(List<Episodios> episodios) {
-		this.episodios = episodios;
+	public void setEpisodios(List<Episodio> episodio) {
+		this.episodio = episodio;
 	}
 
-	public Series getSerie() {
+	@JsonIgnore
+	public Serie getSerie() {
 		return serie;
 	}
 
-	public void setSerie(Series serie) {
+	@JsonIgnore
+	public void setSerie(Serie serie) {
 		this.serie = serie;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Temporada other = (Temporada) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
-
 }

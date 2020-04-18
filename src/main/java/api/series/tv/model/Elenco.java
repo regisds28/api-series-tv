@@ -4,27 +4,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Table(name = "Elenco")
+@EqualsAndHashCode
+@NoArgsConstructor
 public class Elenco {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;	
-	
+	private Long id;
+
 	private String nome;
-	
+
 	private String personagem;
-	
-	@JsonIgnore
-	@ForeignKey(name = "serie_id")
-	@ManyToOne(optional = false)
-	private Series serie;
+
+	@JoinColumn(name = "serie_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.NO_ACTION)
+	@ManyToOne
+	private Serie serie;
 
 	public Long getId() {
 		return id;
@@ -41,48 +51,23 @@ public class Elenco {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getPersonagem() {
 		return personagem;
 	}
-	
+
 	public void setPersonagem(String personagem) {
 		this.personagem = personagem;
 	}
-	
-	public void setSerie(Series serie) {
+
+	@JsonIgnore
+	public void setSerie(Serie serie) {
 		this.serie = serie;
 	}
-	
-	public Series getSerie() {
+
+	@JsonIgnore
+	public Serie getSerie() {
 		return serie;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Elenco other = (Elenco) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
 
 }

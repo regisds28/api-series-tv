@@ -4,79 +4,62 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Entity
-public class Episodios {
-	
+@Table(name = "Episodio")
+@NoArgsConstructor
+@EqualsAndHashCode
+public class Episodio {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;	
-	
-	private int numeroEpisodio;	
-	
+	private Long id;
+
+	private int numeroEpisodio;
+
 	private String tituloEpisodio;
-	
-	@JsonIgnore
-	@ForeignKey(name = "temporada_id")
+
+	@JoinColumn(name = "temporada_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ManyToOne
 	private Temporada temporada;
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public int getNumeroEpisodio() {
 		return numeroEpisodio;
 	}
+
 	public void setNumeroEpisodio(int numeroEpisodio) {
 		this.numeroEpisodio = numeroEpisodio;
 	}
+
+	@JsonIgnore
 	public String getTituloEpisodio() {
 		return tituloEpisodio;
 	}
+
+	@JsonIgnore
 	public void setTituloEpisodio(String tituloEpisodio) {
 		this.tituloEpisodio = tituloEpisodio;
 	}
-	
-	public void setTemporada(Temporada temporada) {
-		this.temporada = temporada;
-	}
-	
-	public Temporada getTemporada() {
-		return temporada;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Episodios other = (Episodios) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
 
 }
