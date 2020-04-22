@@ -7,12 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,13 +26,14 @@ import lombok.NoArgsConstructor;
 public class Episodio {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "episodios_seq")
+	@GeneratedValue(generator = "episodios_seq", strategy = GenerationType.AUTO)
 	private Long id;
 
 	private int numeroEpisodio;
 
 	private String tituloEpisodio;
-
+	
 	@JoinColumn(name = "temporada_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ManyToOne
@@ -52,14 +55,22 @@ public class Episodio {
 		this.numeroEpisodio = numeroEpisodio;
 	}
 
-	@JsonIgnore
 	public String getTituloEpisodio() {
 		return tituloEpisodio;
 	}
 
-	@JsonIgnore
 	public void setTituloEpisodio(String tituloEpisodio) {
 		this.tituloEpisodio = tituloEpisodio;
+	}
+	
+	@JsonIgnore
+	public Temporada getTemporada() {
+		return temporada;
+	}
+	
+	@JsonIgnore
+	public void setTemporada(Temporada temporada) {
+		this.temporada = temporada;
 	}
 
 }

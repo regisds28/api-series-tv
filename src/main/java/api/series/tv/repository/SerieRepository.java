@@ -1,11 +1,11 @@
 package api.series.tv.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 
 import api.series.tv.model.Serie;
 
-@RepositoryRestResource
+@Repository
 public interface SerieRepository extends CrudRepository<Serie, Long> {
 
 }

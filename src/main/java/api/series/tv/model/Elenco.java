@@ -1,18 +1,18 @@
 package api.series.tv.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,17 +24,15 @@ import lombok.NoArgsConstructor;
 public class Elenco {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "elenco_seq")
+	@GeneratedValue(generator = "elenco_seq", strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String nome;
 
-	private String personagem;
-
-	@JoinColumn(name = "serie_id", nullable = false)
-	@OnDelete(action = OnDeleteAction.NO_ACTION)
-	@ManyToOne
-	private Serie serie;
+	@JsonIgnoreProperties({ "autor", "elenco", "temporada", "sinopse" })
+	@ManyToMany(mappedBy = "elenco")
+	private List<Serie> serie = new ArrayList<Serie>();
 
 	public Long getId() {
 		return id;
@@ -52,22 +50,12 @@ public class Elenco {
 		this.nome = nome;
 	}
 
-	public String getPersonagem() {
-		return personagem;
-	}
-
-	public void setPersonagem(String personagem) {
-		this.personagem = personagem;
-	}
-
-	@JsonIgnore
-	public void setSerie(Serie serie) {
-		this.serie = serie;
-	}
-
-	@JsonIgnore
-	public Serie getSerie() {
+	public List<Serie> getSerie() {
 		return serie;
+	}
+
+	public void setSerie(List<Serie> serie) {
+		this.serie = serie;
 	}
 
 }
