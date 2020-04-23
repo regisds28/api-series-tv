@@ -17,36 +17,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.series.tv.model.Serie;
 import api.series.tv.service.SerieService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping
+@RequestMapping("/series")
+@Api(value = "API Rest Lista de Séries de TV")
 public class SerieController {
 
 	@Autowired
 	private SerieService serieService;
 	
 	@GetMapping(value = "/", produces = "application/json")
+	@ApiOperation(value = "Retorna uma lista completa de informações sobre séries", nickname = "")
 	public List<Serie> getSeries() {
 		return serieService.getAllSeries();
 	}
 
 	@GetMapping(value = "/serie-{id}", produces = "application/json")
-	public Optional<Serie> serie(@PathVariable(value = "id") Long serieId) {
+	@ApiOperation(value = "Retorna um ID único de série")
+	public Optional<Serie> getSerieById(@PathVariable(value = "id") Long serieId) {
 		return serieService.getSerieById(serieId);
 	}
 
 	@PostMapping(value = "/", produces = "application/json")
+	@ApiOperation(value = "Insere determinada série e cria-se o ID")
 	public Serie insertSerie(@RequestBody Serie serie) {
 		return serieService.insertSerie(serie);
 	}
 
 	@PutMapping(value = "/", produces = "application/json")
+	@ApiOperation(value = "Atualiza determinada série pelo ID único")
 	public ResponseEntity<Serie> updateSerie(@RequestBody Serie serie) {
 		return serieService.updateSerie(serie);
 	}
 
 	@DeleteMapping(value = "/serie-{id}", produces = "application/json")
+	@ApiOperation(value = "Deleta determinada série pelo ID único")
 	public ResponseEntity<Serie> deleteSerie(@PathVariable(value = "id") long id) {
 		return serieService.deleteSerieById(id);
 	}
